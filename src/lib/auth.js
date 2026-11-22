@@ -3,18 +3,27 @@ import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { jwt } from "better-auth/plugins";
 import { MongoClient } from "mongodb";
 
-const client = new MongoClient(process.env.MONGODB_URI);
-const db = client.db(process.env.DB_NAME || "wedplanDB");
+const uri = (process.env.MONGODB_URI || "").trim();
+const dbName = (process.env.DB_NAME || "wedplanDB").trim();
+
+let client;
+if (!global._mongoClient) {
+  global._mongoClient = new MongoClient(uri);
+}
+client = global._mongoClient;
+const db = client.db(dbName);
 
 export const auth = betterAuth({
   database: mongodbAdapter(db),
+  baseURL: (process.env.BETTER_AUTH_URL || "https://vercel.app").trim(),
+  secret: (process.env.BETTER_AUTH_SECRET || "").trim(),
   emailAndPassword: {
     enabled: true,
   },
   socialProviders: {
     google: {
-      clientId: process.env.GOOGLE_CLIENT_ID || "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+      clientId: (process.env.GOOGLE_CLIENT_ID || "").trim(),
+      clientSecret: (process.env.GOOGLE_CLIENT_SECRET || "").trim(),
     },
   },
   user: {
@@ -43,4 +52,3 @@ export const auth = betterAuth({
   },
   plugins: [jwt()],
 });
-
