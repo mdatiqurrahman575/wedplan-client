@@ -15,8 +15,13 @@ const db = client.db(dbName);
 
 export const auth = betterAuth({
   database: mongodbAdapter(db),
-  baseURL: (process.env.BETTER_AUTH_URL || "https://vercel.app").trim(),
+  baseURL: (
+    process.env.BETTER_AUTH_URL || "https://wedplan-client-bay.vercel.app"
+  ).trim(),
   secret: (process.env.BETTER_AUTH_SECRET || "").trim(),
+  rateLimit: {
+    enabled: false,
+  },
   emailAndPassword: {
     enabled: true,
   },
