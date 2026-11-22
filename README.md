@@ -2,52 +2,62 @@
 
 **WedPlan** is a modern, full-stack, role-based wedding planning platform that connects couples (Customers) with verified wedding service providers (Vendors) under complete administrative moderation (Admins).
 
-## Live Demo Links
-- **Frontend Live URL (Vercel):** https://wedplan-client-bay.vercel.app
-- **Backend API URL (Vercel):** https://wedplan-server-nu-virid.vercel.app
+## Live Links & Repositories
+
+- **Live Website (Client):** https://wedplan-client-bay.vercel.app
+- **Production API (Server):** https://wedplan-server-nu-virid.vercel.app
+- **Client GitHub Repository:** https://github.com/mdatiqurrahman575/wedplan-client
+- **Server GitHub Repository:** https://github.com/mdatiqurrahman575/wedplan-server
 
 ---
 
 ## Demo Test Credentials
-Use the following accounts to test role-based dashboards and permissions:
 
-| Role | Name | Email | Password |
-| :--- | :--- | :--- | :--- |
-| **Admin** | Ahmed | `haa@gmail.com` | `আপনার_পাসওয়ার্ড_দিন` |
-| **Vendor** | Ah Hasan | `haaaa@gmail.com` | `আপনার_পাসওয়ার্ড_দিন` |
-| **Customer** | Hasan | `haaa@gmail.com` | `আপনার_পাসওয়ার্ড_দিন` |
+Use the following accounts to test role-based dashboards and permissions on the live site:
+
+| Role         | Name     | Email             | Password   |
+| :----------- | :------- | :---------------- | :----------|
+| **Admin**    | Ahmed    | `haa@gmail.com`   | `Atik123#` |
+| **Vendor**   | Ah Hasan | `haaaa@gmail.com` | `Atik123#` |
+| **Customer** | Hasan    | `haaa@gmail.com`  | `Atik123#` |
 
 ---
 
 ## Key Features & Business Rules
 
 ### 1. Authentication & Role Security
+
 - Powered by **Better Auth** supporting Email/Password registration and **Google OAuth**.
 - Password validation enforces a minimum of 6 characters with at least 1 uppercase and 1 lowercase letter.
 - Public sign-up allows selecting only **Customer** or **Vendor** roles (Admin is assigned directly in MongoDB).
 - Blocked users (`isBlocked: true`) are automatically restricted from accessing protected endpoints.
 
 ### 2. Public Pages & Discovery
+
 - **Home Page:** Wedding-themed Hero Banner, 6 Service Categories, Featured Approved & Active Services, "Why Choose WedPlan?", and "How WedPlan Works" with **Framer Motion** animations.
-- **Browse Services (`/services`):** Search by service name, filter by category and location, and sort by price (Ascending / Descending). Unauthenticated users are redirected to Sign In when clicking "View Details".
+- **Browse Services:** Search by service name, filter by category and location, and sort by price (Ascending / Descending). Unauthenticated users are redirected to Sign In when clicking "View Details".
 
 ### 3. Booking System (`/services/[id]`)
+
 - Protected route accessible only to authenticated users.
 - Only **Customers** can place bookings; Vendors and Admins are restricted from booking services.
 - **Duplicate Booking Prevention:** Prevents booking the same service on the same `eventDate` if an active booking already exists.
 
 ### 4. Role-Based Dashboards
+
 - **Customer Dashboard:** Overview statistics, My Bookings (can cancel only `Pending` bookings), and Profile Settings (role and subscription are locked).
 - **Vendor Dashboard:** Overview statistics, Add Service (defaults to `Pending`; **Free Plan limit: max 3 active services**), My Services (CRUD + active toggle), Booking Requests (Accept/Reject `Pending` requests), Subscription comparison & Stripe upgrade, and Profile Settings.
 - **Admin Dashboard:** Platform overview metrics, Manage Users (search, filter by role, Block/Unblock), Manage Services (Approve/Reject/Delete), and Read-Only Stripe Transactions history.
 
 ### 5. Stripe Subscription & Webhook Security
+
 - Vendors upgrade from **Free** to **Premium** via **Stripe Checkout (Test Mode)**.
 - Account upgrade and transaction logging occur strictly after verifying the `checkout.session.completed` event on the backend **Stripe Webhook**.
 
 ---
 
 ## Tech Stack
+
 - **Framework:** Next.js (App Router)
 - **Styling & UI:** Tailwind CSS, ShadCN UI, Lucide Icons
 - **Animations:** Framer Motion
@@ -60,18 +70,21 @@ Use the following accounts to test role-based dashboards and permissions:
 ## Local Setup & Installation
 
 1. **Clone the repository:**
+
    ```bash
-   git clone https://github.com
+   git clone https://wedplan-client-bay.vercel.app
    cd wedplan-client
    ```
 
 2. **Install dependencies:**
+
    ```bash
    npm install
    ```
 
 3. **Configure Environment Variables:**
    Create a `.env.local` file in the root directory and add:
+
    ```env
    NEXT_PUBLIC_API_URL=http://localhost:5000/api
    BETTER_AUTH_SECRET=your_better_auth_secret
