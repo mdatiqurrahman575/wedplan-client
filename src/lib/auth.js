@@ -12,14 +12,14 @@ const options = {
   socketTimeoutMS: 45000,
 };
 
-let client = new MongoClient(uri, options);
-let db = client.db(dbName);
+let client;
+if (!global._mongoClient) {
+  global._mongoClient = new MongoClient(uri, options);
+}
+client = global._mongoClient;
+const db = client.db(dbName);
 
 export async function ensureMongoConnected() {
-  if (!client || (client.topology && client.topology.isClosed())) {
-    client = new MongoClient(uri, options);
-    db = client.db(dbName);
-  }
   await client.connect();
 }
 
