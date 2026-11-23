@@ -13,31 +13,20 @@ const options = {
 };
 
 let client;
-let clientPromise;
-
-if (!global._mongoClientPromise) {
-  client = new MongoClient(uri, options);
-  global._mongoClientPromise = client.connect();
+if (!global._mongoClient) {
+  global._mongoClient = new MongoClient(uri, options);
 }
-clientPromise = global._mongoClientPromise;
-
-// Vercel Serverless-এ কোনো কারণে কানেকশন বন্ধ হলে স্বয়ংক্রিয়ভাবে পুনরায় কানেক্ট করা
-const connectedClient = await clientPromise;
-if (connectedClient.topology && connectedClient.topology.isClosed()) {
-  const freshClient = new MongoClient(uri, options);
-  global._mongoClientPromise = freshClient.connect();
-}
-
-const db = (await global._mongoClientPromise).db(dbName);
+client = global._mongoClient;
+const db = client.db(dbName);
 
 export const auth = betterAuth({
   database: mongodbAdapter(db),
   baseURL: (
-    process.env.BETTER_AUTH_URL || "https://wedplan-client-bay.vercel.app"
+    process.env.BETTER_AUTH_URL || "https://vercel.app"
   ).trim(),
   secret: (process.env.BETTER_AUTH_SECRET || "").trim(),
   trustedOrigins: [
-    "https://wedplan-client-bay.vercel.app",
+    "https://vercel.app",
     "http://localhost:3000",
   ],
   rateLimit: {
