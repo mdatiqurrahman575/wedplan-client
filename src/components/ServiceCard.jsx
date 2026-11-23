@@ -30,7 +30,7 @@ export default function ServiceCard({ service }) {
         </span>
       </div>
 
-      {/* Content */}
+
       <div className="p-5 flex flex-col flex-grow justify-between">
         <div>
           <h3 className="text-lg font-bold text-gray-900 line-clamp-1 mb-1">{service.serviceName}</h3>
