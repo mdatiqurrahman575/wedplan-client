@@ -12,23 +12,22 @@ const options = {
   socketTimeoutMS: 45000,
 };
 
-let client;
-if (!global._mongoClient) {
-  global._mongoClient = new MongoClient(uri, options);
+let client = new MongoClient(uri, options);
+let db = client.db(dbName);
+
+export async function ensureMongoConnected() {
+  if (!client || (client.topology && client.topology.isClosed())) {
+    client = new MongoClient(uri, options);
+    db = client.db(dbName);
+  }
+  await client.connect();
 }
-client = global._mongoClient;
-const db = client.db(dbName);
 
 export const auth = betterAuth({
   database: mongodbAdapter(db),
-  baseURL: (
-    process.env.BETTER_AUTH_URL || "https://vercel.app"
-  ).trim(),
+  baseURL: (process.env.BETTER_AUTH_URL || "https://vercel.app").trim(),
   secret: (process.env.BETTER_AUTH_SECRET || "").trim(),
-  trustedOrigins: [
-    "https://vercel.app",
-    "http://localhost:3000",
-  ],
+  trustedOrigins: ["https://vercel.app", "http://localhost:3000"],
   rateLimit: {
     enabled: false,
   },
