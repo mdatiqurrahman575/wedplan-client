@@ -25,9 +25,21 @@ export async function ensureMongoConnected() {
 
 export const auth = betterAuth({
   database: mongodbAdapter(db),
-  baseURL: (process.env.BETTER_AUTH_URL || "https://vercel.app").trim(),
+  baseURL: (
+    process.env.BETTER_AUTH_URL || "https://wedplan-client-bay.vercel.app"
+  ).trim(),
   secret: (process.env.BETTER_AUTH_SECRET || "").trim(),
-  trustedOrigins: ["https://vercel.app", "http://localhost:3000"],
+  trustedOrigins: [
+    "https://wedplan-client-bay.vercel.app",
+    "http://localhost:3000",
+  ],
+  account: {
+    accountLinking: {
+      enabled: true,
+      trustedProviders: ["google"],
+      allowDifferentEmails: true,
+    },
+  },
   rateLimit: {
     enabled: false,
   },
